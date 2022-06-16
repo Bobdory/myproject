@@ -1,0 +1,189 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="text-align: center;">
+
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+    .container{
+        font-family: 'Do Hyeon', sans-serif;
+    }
+    </style>
+
+
+<head>
+    <body >
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type = "text/javascript" src = "http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script type = "text/javascript" src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <title>Document</title>
+    </head>
+
+
+
+<form action="/apply/sendMail" method=post class="needs-validation" novalidate>
+
+<center>
+
+ <table boder = "cellspacing = "1" id="document">
+
+<tr><br>
+    <h1 style="font-size:40px;" > 체력단련비 신청서 </h1>
+
+  <tr>
+   <td> <br>■ 인적사항 </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 행번 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 성명 </td>
+   <td> <input name="name" type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 부점명 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 직급 </td>
+       <td>
+          <select>
+              <option> 행원 </option>
+              <option> 대리 </option>
+              <option> 과장 </option>
+              <option> 차장 </option>
+              <option> 부지점장 </option>
+            </select>
+       </td>
+  </tr>
+
+  <tr>
+   <td> <br>■ 수강상세내역 </td>
+  </tr>
+
+
+  <tr>
+   <td text-align="center"> 수강과목 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 수강기간 </td>
+   <td>
+       <form>
+      <p><input type="date"> ~ <input type="date"></p>
+       </form>
+   </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 기관명 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 기관 전화번호 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 총결제금액 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 수강개월 </td>
+      <td>
+          <select>
+              <option> 1개월 </option>
+              <option> 2개월 </option>
+              <option> 3개월 </option>
+              <option> 4개월 </option>
+              <option> 5개월 </option>
+              <option> 6개월 </option>
+              <option> 7개월 </option>
+              <option> 8개월 </option>
+              <option> 9개월 </option>
+              <option> 10개월 </option>
+              <option> 11개월 </option>
+              <option> 12개월 </option>
+            </select>
+       </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 영수증 결제일 </td>
+
+   <td>
+       <form>
+      <p><input type="date"></p>
+       </form>
+   </td>
+  </tr>
+
+  <tr>
+   <td text-align="center"> 승인번호 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-alig    n="center"> 결제카드번호 </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td text-alig    n="center"> Email </td>
+   <td> <input type = "text" /> </td>
+  </tr>
+
+  <tr>
+   <td > <br> ■ 서류 첨부 </td>
+  </tr>
+
+</table>
+
+<body>
+
+<tr>
+
+    <td>영수증</td>
+   <td>
+    <input type=file name=email_file value="">
+   </td>
+
+     <br><td>수강확인서</td>
+   <td>
+    <input type=file name=email_file value="">
+   </td>
+
+     <br><td>신용카드</td>
+   <td>
+    <input type=file name=email_file value="">
+   </td>
+ </tr>
+
+
+
+
+<br>
+</body>
+    <br>
+  <p>
+   <input type=submit value=메일발송>
+  </p>
+</center>
+</form>
+
+
+</html>
+{% endblock %}
