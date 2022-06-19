@@ -165,15 +165,16 @@ def makeHtml(filename, request):
 @bp.route('/apply', methods=('GET', 'POST'))
 def make():
     info = {}
+
     info["name"] = g.user.name
     info["usernumber"] = g.user.usernumber
     info["dept"] = g.user.dept
     info["position"] = g.user.position
 
-    # info["name"] = "김준희test"
-    # info["usernumber"] = "1011542test"
-    # info["dept"] = "인사섹션test"
-    # info["position"] = "대리test"
+    #info["name"] = "김준희test"
+    #info["usernumber"] = "1011542test"
+    #info["dept"] = "인사섹션test"
+    #info["position"] = "대리test"
 
     info["course_start_time"] = datetime.datetime.now().strftime('%Y-%m-%d')
     info["course_end_time"] = (datetime.datetime.now() + datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
