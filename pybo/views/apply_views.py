@@ -1,18 +1,13 @@
-import os
 import smtplib
 import datetime
-from flask import Blueprint, render_template, request, g, Flask, flash, redirect, url_for
+from flask import Blueprint, render_template, request, g
 from werkzeug.utils import secure_filename
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
-from pathlib import Path
 from email.mime.multipart import MIMEMultipart
 from email import encoders
 
-UPLOAD_FOLDER = 'C:/projects/myproject/applyUpload'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 bp = Blueprint('apply', __name__, url_prefix='/apply')
 
@@ -25,13 +20,13 @@ def allowed_file(filename):
 
 def set_file(file):
     if file.filename == '':
-        print("file1 이(가) 없습니다.")
+        print("파일이 없습니다.")
     if file and allowed_file(file.filename):
-        filename1 = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
-        return filename1
+        filename = secure_filename(file.filename)
+        file.save(filename)
+        return filename
 
-def makeHtml(filepath, request):
+def makeHtml(filename, request):
     html_text = '''
         <!doctype html>
             <html lang="en">
@@ -163,31 +158,32 @@ def makeHtml(filepath, request):
             card_number=request.form["card_number"],
         )
 
-    with open(UPLOAD_FOLDER+"/"+filepath, 'w', encoding="utf-8") as html_file:
+    with open(filename, 'w', encoding="utf-8") as html_file:
         html_file.write(html_text)
 
 
 @bp.route('/apply', methods=('GET', 'POST'))
 def make():
     info = {}
-    # info["name"] = g.user
-    # name = user.name
-    # info["usernumber"] = user.usernumber
-    # info["dept"] = user.dept
-    # info["position"] = user.position
+    info["name"] = g.user.name
+    info["usernumber"] = g.user.usernumber
+    info["dept"] = g.user.dept
+    info["position"] = g.user.position
 
-    info["name"] = "김준희"
-    info["usernumber"] = "1011542"
-    info["dept"] = "인사섹션"
-    info["position"] = "대리"
+    # info["name"] = "김준희test"
+    # info["usernumber"] = "1011542test"
+    # info["dept"] = "인사섹션test"
+    # info["position"] = "대리test"
+
     info["course_start_time"] = datetime.datetime.now().strftime('%Y-%m-%d')
     info["course_end_time"] = (datetime.datetime.now() + datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     info["payment_date"] = datetime.datetime.now().strftime('%Y-%m-%d')
     files = {}
     if request.method == 'POST':
+
         files["email_html"] = "email.html"
 
-        to_mail = request.form["email"]
+        to_mail = "k2hmal@naver.com"
         from_mail = "hanabankhconnect@gmail.com"
         subject = "체력단련비 신청서"
 
@@ -197,9 +193,9 @@ def make():
         files["email_file2"] = set_file(request.files['email_file2'])
         files["email_file3"] = set_file(request.files['email_file3'])
 
-        sendMultiMessage(to_mail, from_mail, subject, files)
+        result = sendMultiMessage(to_mail, from_mail, subject, files)
 
-        return render_template('apply/apply_make.html', info=request.form, files=files)
+        return render_template('apply/apply_make.html', info=request.form, files=files, result=result)
     else:
         return render_template('apply/apply_make.html', info=info, files=files)
 
@@ -208,13 +204,12 @@ def sendMultiMessage(to_email, from_email, subject, files):
         message = """
                     <html>
                     <body>
-                        <h2>{title}</h2>
+                        <h2>체력단련비 신청서</h2>
                         <p>작성하신 신청내역서 입니다.</p>
                     </body>
                     </html>
-                """.format(
-            title='체력단련비 신청서'
-        )
+                """
+
         print("【Message와File의Email송신시작】：" + str(datetime.datetime.now()))
 
         msg = MIMEMultipart()
@@ -226,11 +221,11 @@ def sendMultiMessage(to_email, from_email, subject, files):
         for path in files:
             part = MIMEBase('application', "octet-stream")
             if(files[path]):
-                with open(UPLOAD_FOLDER+"/"+files[path], 'rb') as file:
+                with open(files[path], 'rb') as file:
                     part.set_payload(file.read())
                 encoders.encode_base64(part)
                 part.add_header('Content-Disposition',
-                                'attachment; filename={}'.format(Path(UPLOAD_FOLDER+"/"+files[path]).name))
+                                'attachment; filename={}'.format(files[path]))
                 msg.attach(part)
 
         # 메일송신처리
@@ -247,9 +242,12 @@ def sendMultiMessage(to_email, from_email, subject, files):
         print("type:" + str(type(e)))
         print("args:" + str(e.args))
         print("e자신:" + str(e))
+        return False
 
     else:
         print("【정상적으로 Message와File의Email송신이 완료됬습니다.】：" + str(datetime.datetime.now()))
+        return True
     finally:
         print("【Message와File의Email송신완료】：" + str(datetime.datetime.now()))
+        return True
 
